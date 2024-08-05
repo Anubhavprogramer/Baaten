@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-800">
+    <div class="w-full min-h-screen p-10 text-white">
+        <div class="max-w-2xl mx-auto bg-zinc-700 rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold mb-4">Profile</h1>
+            <div class="mb-4">
+                <label class="block text-gray-400">Name:</label>
+                <p class="text-lg"><%= user.name %></p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-400">Username:</label>
+                <p class="text-lg"><%= user.username %></p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-400">Email:</label>
+                <p class="text-lg"><%= user.email %></p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-400">Age:</label>
+                <p class="text-lg"><%= user.age %></p>
+            </div>
+            <div class="mt-6">
+                <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</a>
+                <a href="/myposts" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">My post</a>
+            </div>
+        </div>
+        <div class="max-w-2xl mx-auto mt-10 bg-zinc-700 rounded-lg shadow-lg p-8">
+            <h4 class="text-2xl font-bold mb-4">Create your post</h4>
+            <form action="/create/post" method="post" class="flex flex-col gap-4">
+                <input type="text" class="px-3 py-2 outline-none rounded-lg bg-zinc-800 text-white placeholder-gray-400" name="title" placeholder="Title" required>
+                <textarea class="px-3 py-2 outline-none rounded-lg bg-zinc-800 text-white placeholder-gray-400" name="content" placeholder="Write what is on your mind" rows="4" required></textarea>
+                <button type="submit" class="p-3 bg-blue-500 rounded-lg hover:bg-blue-400 cursor-pointer text-white font-bold">Post</button>
+            </form>
+            
+        </div>
+    </div>
+</body>
+</html>
