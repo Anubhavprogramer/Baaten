@@ -50,7 +50,8 @@ const deletePost = async (req, res) => {
 const getMyPosts = async (req, res) => {
     try {
         const posts = await postModel.find({ user: req.user.userid });
-        res.render('myPost', { posts });
+        const user = await userModel.findById(req.user.userid);
+        res.render('myPost', { posts, user });
     } catch (error) {
         return res.status(500).send('An internal server error occurred');
     }
@@ -59,15 +60,93 @@ const getMyPosts = async (req, res) => {
 const getAllPosts = async (req, res) => {
     try {
         const posts = await postModel.find().populate('user', 'username');
-        res.render('allPost', { posts });
+        const user = await userModel.findById(req.user.userid);
+        res.render('allPost', { posts, user });
     } catch (error) {
         return res.status(500).send('An internal server error occurred');
     }
 };
 
+const likePost = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const userId = req.user.userid;
+
+        // Find the post and update the likes array
+        const post = await postModel.findById(postId);
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+        
+        if(post.likes.indexOf(userId) === -1){
+            post.likes.push(userId);
+            await post.save();
+        }
+        else{
+            post.likes.splice(post.likes.indexOf(userId), 1);
+            await post.save();
+        }
+
+        res.redirect('/allposts');
+    } catch (error) {
+        console.error('Error liking post:', error);
+        return res.status(500).send('An internal server error occurred');
+    }
+};
+const editPost = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const userId = req.user.userid;
+
+        const post = await postModel.findById(postId);
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+
+        if(post.user.toString() !== userId){
+            return res.status(401).send('Unauthorized');
+        }
+
+        res.render('editPost', { post });
+    } catch (error) {
+        console.error('Error liking post:', error);
+        return res.status(500).send('An internal server error occurred');
+    }
+};
+
+const updatePost = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const userId = req.user.userid;
+        const { title, content } = req.body;
+
+        const post = await postModel.findById(postId);
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+
+        if(post.user.toString() !== userId){
+            return res.status(401).send('Unauthorized');
+        }
+
+        post.title = title;
+        post.content = content;
+        await post.save();
+
+        res.redirect('/myposts');
+    } catch (error) {
+        console.error('Error updating post:', error);
+        return res.status(500).send('An internal server error occurred');
+    }
+}
+
+
 module.exports = {
     createPost,
     deletePost,
     getMyPosts,
-    getAllPosts
+    getAllPosts,
+    likePost,
+    editPost,
+    updatePost
 };

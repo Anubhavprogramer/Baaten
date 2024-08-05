@@ -10,11 +10,28 @@
     <div class="w-full min-h-screen p-10 relative">
         <h1 class="text-3xl font-bold mb-4">All Posts</h1>
         <div class="flex flex-col gap-4">
-            <% posts.forEach(post => { %>
-                <div class="bg-zinc-700 rounded-lg shadow-lg p-6">
+            <% posts.reverse().forEach(post => { %>
+                <div class="bg-zinc-700 rounded-lg shadow-lg p-6 w-[20%] relative">
+                    <!-- Edit button positioned at the top left corner -->
+                    <% if (post.user._id.toString() === user._id.toString()) { %>
+                        <a href="/edit/post/<%= post._id %>" class="absolute top-2 right-2 p-1 bg-green-500 rounded-full hover:bg-green-400 text-white text-xs font-bold">
+                            Edit
+                        </a>
+                    <% } %>
+                    
                     <h2 class="text-xl font-bold mb-2"><%= post.title %></h2>
                     <p class="mb-4"><%= post.content %></p>
                     <p class="text-gray-400">Posted by: <%= post.user.username %></p>
+                    
+                    <!-- Conditionally render the like button if the post is not by the logged-in user -->
+                    <% if (post.user._id.toString() !== user._id.toString()) { %>
+                        <form action="/like/post/<%= post._id %>" method="post" class="mt-4">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded">
+                                <%= post.likes.length %> 
+                                <%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike" %>
+                            </button>
+                        </form>
+                    <% } %>
                 </div>
             <% }) %>
         </div>

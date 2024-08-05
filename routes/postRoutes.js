@@ -11,4 +11,10 @@ router.get('/myposts', isLoggedIn, postController.getMyPosts);
 
 router.get('/allposts', isLoggedIn, postController.getAllPosts);
 
+router.post('/like/post/:id', isLoggedIn, postController.likePost);
+
+router.get('/edit/post/:id', isLoggedIn, postController.editPost);
+
+router.post('/create/post', isLoggedIn, postController.updatePost);
+
 module.exports = router;

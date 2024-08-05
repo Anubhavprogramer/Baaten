@@ -20,8 +20,15 @@
             </div>
         </div>
         <div class="flex flex-col gap-4">
-            <% posts.forEach(post => { %>
-                <div class="bg-zinc-700 rounded-lg shadow-lg p-6">
+            <% posts.reverse().forEach(post => { %>
+                <div class="bg-zinc-700 rounded-lg shadow-lg p-6 w-[20%] relative">
+                    <!-- Conditionally render the edit button if the post is by the logged-in user -->
+                    <% if (post.user._id.toString() === user._id.toString()) { %>
+                        <a href="/edit/post/<%= post._id %>" class="absolute top-2 right-2 p-1 bg-green-500 rounded-full hover:bg-green-400 text-white text-xs font-bold">
+                            Edit
+                        </a>
+                    <% } %>
+                    
                     <h2 class="text-xl font-bold mb-2"><%= post.title %></h2>
                     <p class="mb-4"><%= post.content %></p>
                     <form action="/delete/post/<%= post._id %>" method="post">
