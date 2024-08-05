@@ -1,4 +1,5 @@
 const postModel = require('../models/post');
+const userModel = require('../models/user');
 
 const createPost = async (req, res) => {
     try {
@@ -9,18 +10,32 @@ const createPost = async (req, res) => {
             return res.status(400).send('Title and content are required');
         }
 
+        // Find the user by email (assuming req.user.email is set correctly)
+        const user = await userModel.findById(req.user.userid);
+
+        if (!user) {
+            console.log('User not found');
+            return res.status(404).send('User not found');
+        }
+
+        // Create a new post
         const newPost = await postModel.create({
             user: req.user.userid,
             title,
             content
         });
 
+        // Add the new post ID to the user's posts array
+        user.post.push(newPost._id);
+        await user.save();
+
         res.redirect('/myposts');
     } catch (error) {
         console.error('Error creating post:', error);
-        return res.status(500).send('An internal server error occurred');
+        return res.status(500).send(error);
     }
 };
+
 
 const deletePost = async (req, res) => {
     try {
