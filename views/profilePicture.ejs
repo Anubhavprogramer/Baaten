@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Profile Picture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="w-full min-h-screen p-10 flex items-center justify-center">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-md">
+            <h1 class="text-2xl font-bold text-white mb-6 text-center">Upload Profile Picture</h1>
+            <form id="uploadForm" action="/upload/profile-picture" method="post" enctype="multipart/form-data" class="flex flex-col gap-6">
+                <input id="fileInput" type="file" name="profilePicture" accept="image/*" class="px-4 py-2 bg-gray-700 text-gray-200 placeholder-gray-400 outline-none rounded-lg">
+                <div id="fileActions" class="flex gap-4 justify-between">
+                    <button type="button" id="cancelButton" class="py-2 px-4 bg-gray-600 hover:bg-gray-500 text-white font-bold rounded-lg shadow-md transition">Cancel</button>
+                    <button type="submit" class="w-full py-3 bg-blue-500 rounded-lg text-white font-bold shadow-md hover:bg-blue-600 transition">Upload</button>
+                </div>
+            </form>
+            <div class="mt-6 text-center">
+                <a href="/profile" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md transition">Back</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Cancel Button -->
+    <script>
+        document.getElementById('cancelButton').addEventListener('click', () => {
+            document.getElementById('fileInput').value = ''; // Clear the selected file
+        });
+    </script>
+</body>
+</html>

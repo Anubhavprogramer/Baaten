@@ -11,7 +11,18 @@ const getProfile = async (req, res) => {
         return res.status(500).send('An internal server error occurred');
     }
 };
+const getProfilePicture = async (req, res) => {
+    res.render('profilePicture');
+};
+const uploadpicture = async (req, res) => {
+   let user = await userModel.findOne({email: req.user.email})
+    user.profilePicture = req.file.filename;
+    await user.save();
+    res.redirect('/profile');
+};
 
 module.exports = {
-    getProfile
+    getProfile,
+    getProfilePicture,
+    uploadpicture
 };
