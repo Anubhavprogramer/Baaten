@@ -14,7 +14,7 @@
                 <div class="relative">
                     <img src="/images/uploads/<%= user.profilePicture %>" alt="" class="rounded-full w-32 h-32 border-4 border-gray-600 shadow-md">
                     <!-- Camera Icon -->
-                    <button onclick="window.location.href = '/profile/uploads' " class="absolute bottom-0 right-0 bg-gray-700 p-2 rounded-full border-2 border-gray-600 hover:bg-gray-600 focus:outline-none transition">
+                    <button onclick="window.location.href = '/profile/uploads'" class="absolute bottom-0 right-0 bg-gray-700 p-2 rounded-full border-2 border-gray-600 hover:bg-gray-600 focus:outline-none transition">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l4 4m0 0l-4 4m4-4H7m9-6H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2z"></path>
                         </svg>
@@ -36,12 +36,54 @@
         <!-- Create Post Section -->
         <div class="max-w-2xl mx-auto mt-10 bg-gray-800 rounded-lg shadow-xl p-8">
             <h4 class="text-2xl font-semibold mb-6 text-center">Create a New Post</h4>
-            <form action="/create/post" method="post" class="flex flex-col gap-6">
+            <form action="/create/post" method="post" enctype="multipart/form-data" class="flex flex-col gap-6">
                 <input type="text" class="px-4 py-3 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 outline-none" name="title" placeholder="Title" required>
                 <textarea class="px-4 py-3 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 outline-none" name="content" placeholder="Write what is on your mind" rows="5" required></textarea>
+                
+                <!-- Image Upload Section -->
+                <div id="image-upload-section" class="flex flex-col gap-4">
+                    <input type="file" id="image-input" class="px-4 py-3 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 outline-none" name="image" accept="image/*" onchange="previewImage(event)">
+                    <div id="image-preview" class="relative">
+                        <img id="preview" src="" alt="Image Preview" class="w-full h-auto rounded-lg hidden">
+                        <button type="button" id="cancel-button" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-1 px-2 rounded hidden" onclick="cancelImage()">Cancel</button>
+                    </div>
+                </div>
+                
                 <button type="submit" class="w-full py-3 bg-blue-500 rounded-lg text-white font-bold shadow-md hover:bg-blue-600 transition">Post</button>
             </form>
         </div>
     </div>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview');
+            const cancelButton = document.getElementById('cancel-button');
+            const imagePreview = document.getElementById('image-preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    cancelButton.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.classList.add('hidden');
+                cancelButton.classList.add('hidden');
+            }
+        }
+
+        function cancelImage() {
+            const imageInput = document.getElementById('image-input');
+            const preview = document.getElementById('preview');
+            const cancelButton = document.getElementById('cancel-button');
+
+            imageInput.value = ''; // Clear the file input
+            preview.classList.add('hidden'); // Hide the image preview
+            cancelButton.classList.add('hidden'); // Hide the cancel button
+        }
+    </script>
 </body>
 </html>

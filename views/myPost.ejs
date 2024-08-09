@@ -28,9 +28,15 @@
                             Edit
                         </a>
                     <% } %>
-                    
+
                     <h2 class="text-xl font-bold mb-2"><%= post.title %></h2>
                     <p class="mb-4"><%= post.content %></p>
+
+                    <!-- Image Section -->
+                    <% if (post.photo) { %>
+                        <img src="/images/uploads/<%= post.photo %>" alt="Post Image" class="w-full h-auto rounded-lg mb-4">
+                    <% } %>
+
                     <form action="/delete/post/<%= post._id %>" method="post">
                         <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" type="submit">Delete</button>
                     </form>

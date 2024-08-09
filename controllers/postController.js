@@ -3,38 +3,48 @@ const userModel = require('../models/user');
 
 const createPost = async (req, res) => {
     try {
-        const { title, content } = req.body;
+        const title = req.body.title;
+        const content = req.body.content;
 
+        // Check if title and content are provided
         if (!title || !content) {
             console.log('Title and content are required');
             return res.status(400).send('Title and content are required');
         }
 
-        // Find the user by email (assuming req.user.email is set correctly)
+        // Check if the user is authenticated
         const user = await userModel.findById(req.user.userid);
-
         if (!user) {
             console.log('User not found');
             return res.status(404).send('User not found');
+        }
+
+        // Check if a photo is uploaded
+        let photoFilename = '';
+        if (req.file) {
+            photoFilename = req.file.filename;
         }
 
         // Create a new post
         const newPost = await postModel.create({
             user: req.user.userid,
             title,
-            content
+            content,
+            photo: photoFilename // Add the filename of the uploaded photo
         });
 
         // Add the new post ID to the user's posts array
-        user.post.push(newPost._id);
+        user.post.push(newPost._id); // Assuming 'posts' is the correct field in the user schema
         await user.save();
 
+        // Redirect to the user's posts page
         res.redirect('/myposts');
     } catch (error) {
         console.error('Error creating post:', error);
-        return res.status(500).send(error);
+        return res.status(500).send('Server Error');
     }
 };
+
 
 
 const deletePost = async (req, res) => {
