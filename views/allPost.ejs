@@ -1,45 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>All Posts</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-zinc-800 text-white">
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-zinc-800 text-white">
     <div class="w-full min-h-screen p-10 relative">
-        <h1 class="text-3xl font-bold mb-4">All Posts</h1>
-        <div class="flex flex-col gap-4">
-            <% posts.reverse().forEach(post => { %>
-                <div class="bg-zinc-700 rounded-lg shadow-lg p-6 w-[20%] relative">
-                    <!-- Edit button positioned at the top left corner -->
-                    <% if (post.user._id.toString() === user._id.toString()) { %>
-                        <a href="/edit/post/<%= post._id %>" class="absolute top-2 right-2 p-1 bg-green-500 rounded-full hover:bg-green-400 text-white text-xs font-bold">
-                            Edit
-                        </a>
-                    <% } %>
-                    
-                    <h2 class="text-xl font-bold mb-2"><%= post.title %></h2>
-                    <p class="mb-4"><%= post.content %></p>
-                    <p class="text-gray-400">Posted by: <%= post.user.username %></p>
-                    
-                    <!-- Conditionally render the like button if the post is not by the logged-in user -->
-                    <% if (post.user._id.toString() !== user._id.toString()) { %>
-                        <form action="/like/post/<%= post._id %>" method="post" class="mt-4">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded">
-                                <%= post.likes.length %> 
-                                <%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike" %>
-                            </button>
-                        </form>
-                    <% } %>
-                </div>
-            <% }) %>
-        </div>
+      <h1 class="text-3xl font-bold mb-4">All Posts</h1>
+      <div class="flex flex-col gap-4 items-center">
+        <% posts.reverse().forEach(post => { %>
+        <div class="bg-zinc-700 rounded-lg shadow-lg p-6 w-[40%] relative">
+          
+          <!-- Edit and Delete buttons positioned at the top right corner -->
+          <div class="absolute top-2 right-2 flex gap-2">
+            <% if (post.user._id.toString() === user._id.toString()) { %>
+            <a
+              href="/edit/post/<%= post._id %>"
+              class="p-1 rounded-full hover:text-zinc-300 text-white text-xl font-bold"
+            >
+              <i class="ri-edit-2-line"></i>
+            </a>
+            <form action="/delete/post/<%= post._id %>" method="post">
+              <button
+                class="p-1 rounded-full hover:text-zinc-300 text-white text-xl font-bold"
+                type="submit"
+              >
+                <i class="ri-delete-bin-6-line"></i>
+              </button>
+            </form>
+            <% } %>
+          </div>
+          <!-- Image Section -->
+          <% if (post.photo != '') { %>
+          <img
+            src="/images/uploads/<%= post.photo %>"
+            alt="Post Image"
+            class="w-full h-auto rounded-lg mb-4"
+          />
+          <% } %>
+          
+          <h2 class="text-xl font-bold mb-2"><%= post.title %></h2>
+          <p class="mb-4"><%= post.content %></p>
 
-        <!-- Button to go to profile section positioned at the bottom right corner -->
-        <a href="/profile" class="absolute bottom-10 right-10 p-3 bg-blue-500 rounded-lg hover:bg-blue-400 cursor-pointer text-white font-bold">
-            Back to Profile
-        </a>
+
+          <p class="text-gray-400 text-sm mb-4">Posted by: <%= post.user.username %></p>
+
+          <!-- Conditionally render the like button if the post is not by the logged-in user -->
+          <% if (post.user._id.toString() !== user._id.toString()) { %>
+          <form action="/like/post/<%= post._id %>" method="post">
+            <button
+              type="submit"
+              class="flex items-center gap-2 text-white font-bold py-2 px-4 rounded"
+            >
+              <% if (post.likes.indexOf(user._id) === -1) { %>
+              <i class="ri-heart-2-line"></i>
+              <% } else { %>
+              <i class="ri-heart-2-line text-red-500"></i>
+              <% } %>
+               <%= post.likes.length %>
+            </button>
+          </form>
+          <% } %>
+        </div>
+        <% }) %>
+      </div>
+
+      <!-- Button to go to profile section positioned at the bottom right corner -->
+      <a
+        href="/profile"
+        class="sticky bottom-10 right-10 p-3 bg-blue-500 rounded-full hover:bg-blue-700 cursor-pointer text-white font-bold text-xl"
+      >
+        <i class="ri-user-3-line"></i>
+      </a>
     </div>
-</body>
+  </body>
 </html>

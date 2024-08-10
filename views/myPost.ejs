@@ -5,41 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Posts</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
 </head>
 <body class="bg-zinc-800 text-white">
     <div class="w-full min-h-screen p-10">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-3xl font-bold">My Posts</h1>
             <div class="flex gap-2">
-                <a href="/profile" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded">
-                    Back to Profile
+                <a href="/profile" class=" hover:text-zinc-200 text-white font-bold py-2 px-4 rounded">
+                    <i class="ri-user-3-line"></i>
                 </a>
-                <a href="/allposts" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">
-                    All Posts
+                <a href="/allposts" class="hover:text-zinc-200 text-white font-bold py-2 px-4 rounded">
+                    <i class="ri-home-line"></i>
                 </a>
             </div>
         </div>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col justify-center items-center gap-4">
             <% posts.reverse().forEach(post => { %>
-                <div class="bg-zinc-700 rounded-lg shadow-lg p-6 w-[20%] relative">
-                    <!-- Conditionally render the edit button if the post is by the logged-in user -->
-                    <% if (post.user._id.toString() === user._id.toString()) { %>
-                        <a href="/edit/post/<%= post._id %>" class="absolute top-2 right-2 p-1 bg-green-500 rounded-full hover:bg-green-400 text-white text-xs font-bold">
-                            Edit
-                        </a>
-                    <% } %>
+                <div class="bg-zinc-700 rounded-lg shadow-lg p-6 w-[40%] relative">
+                    <!-- Edit and Delete Buttons -->
+                    <div class="absolute top-2 right-2 flex gap-2">
+                        <% if (post.user._id.toString() === user._id.toString()) { %>
+                            <a href="/edit/post/<%= post._id %>" class="p-1 rounded-full hover:text-zinc-300 text-white text-xl font-bold">
+                                <i class="ri-edit-2-line"></i>
+                            </a>
+                        <% } %>
+                        <form action="/delete/post/<%= post._id %>" method="post">
+                            <button class="p-1 rounded-full hover:text-zinc-300 text-white text-xl font-bold" type="submit">
+                                <i class="ri-delete-bin-6-line"></i>
+                            </button>
+                        </form>
+                    </div>
 
                     <h2 class="text-xl font-bold mb-2"><%= post.title %></h2>
                     <p class="mb-4"><%= post.content %></p>
 
                     <!-- Image Section -->
-                    <% if (post.photo) { %>
+                    <% if (post.photo != '') { %>
                         <img src="/images/uploads/<%= post.photo %>" alt="Post Image" class="w-full h-auto rounded-lg mb-4">
                     <% } %>
 
-                    <form action="/delete/post/<%= post._id %>" method="post">
-                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" type="submit">Delete</button>
-                    </form>
+                    <!-- Like and Comment Buttons -->
+                    
                 </div>
             <% }) %>
         </div>
