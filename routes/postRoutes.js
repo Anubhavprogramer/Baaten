@@ -4,7 +4,7 @@ const postController = require('../controllers/postController');
 const isLoggedIn = require('../middleware/authMiddleware');
 const upload = require('../config/multerConfig');
 
-router.post('/create/post', isLoggedIn, upload.single('image'), postController.createPost);
+router.post('/create/post', isLoggedIn, upload, postController.createPost);
 
 router.post('/delete/post/:id', isLoggedIn, postController.deletePost);
 

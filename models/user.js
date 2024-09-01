@@ -12,7 +12,10 @@ const userSchema = new mongoose.Schema({
             ref: "post",
         },
     ],
-    profilePicture: { type: String, default: "default.jpg" },
+    profilePicture: { 
+        url: { type: String, default: '' },
+        public_id: { type: String, default: '' }
+    },
 });
 
 module.exports = mongoose.model("user", userSchema);

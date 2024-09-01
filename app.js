@@ -5,6 +5,9 @@ const connectDB = require('./db');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
+const cloudinary = require('cloudinary');
+
+
 
 require('dotenv').config();
 
@@ -16,7 +19,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+
+
 connectDB();
+
+cloudinary.v2.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+})
 
 app.get('/', (req, res) => {
     res.render('index');

@@ -16,7 +16,7 @@
         <div class="relative max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-xl p-8">
             <div class="flex items-center justify-center mb-6">
                 <div class="relative">
-                    <img src="/images/uploads/<%= user.profilePicture %>" alt="" class="rounded-full w-32 h-32 border-4 border-gray-600 shadow-md">
+                    <img src="<%= user.profilePicture.url%>" alt="" class="rounded-full w-32 h-32 border-4 border-gray-600 shadow-md">
                     <!-- Camera Icon -->
                     <button onclick="window.location.href = '/profile/uploads'" class="absolute bottom-0 right-0 bg-gray-700 p-2 rounded-full border-2 border-gray-600 hover:bg-gray-600 focus:outline-none transition">
                         <i class="ri-camera-line"></i>
